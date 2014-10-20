@@ -35,9 +35,9 @@ void* DataLayerPrefetch(void* layer_pointer) {
   }
   //////////////////////////////////////////////////
 
-  if (layer->output_labels_) {
-    top_label = layer->prefetch_label_->mutable_cpu_data();
-  }
+  // if (layer->output_labels_) {
+  //   top_label = layer->prefetch_label_->mutable_cpu_data();
+  // }
   const Dtype scale = layer->layer_param_.data_param().scale();
   const int batch_size = layer->layer_param_.data_param().batch_size();
   const int crop_size = layer->layer_param_.data_param().crop_size();
@@ -147,7 +147,7 @@ void DataLayer<Dtype>::SetUp(const vector<Blob<Dtype>*>& bottom,
       vector<Blob<Dtype>*>* top) {
   CHECK_EQ(bottom.size(), 0) << "Data Layer takes no input blobs.";
   CHECK_GE(top->size(), 1) << "Data Layer takes at least one blob as output.";
-  
+
   if (top->size() == 1) {
     output_labels_ = false;
   } else {
@@ -204,9 +204,19 @@ void DataLayer<Dtype>::SetUp(const vector<Blob<Dtype>*>& bottom,
       << (*top)[0]->width();
   // label
   if (output_labels_) {
-    (*top)[1]->Reshape(this->layer_param_.data_param().batch_size(), 1, 1, 1);
+    CHECK_GT(datum.label_size(), 0) << "Datum should contain labels for top";
+    // (*top)[1]->Reshape(this->layer_param_.data_param().batch_size(),
+    //   datum.label_size(), 1, 1);
+    for (int i=1; i<=datum.label_size();i++) {
+        (*top)[i]->Reshape(this->layer_param_.data_param().batch_size(),
+        1, 1, 1);
+    }
+    // LOG(INFO) << "output label size: " << (*top)[1]->num() << ","
+    //   << (*top)[1]->channels() << "," << (*top)[1]->height() << ","
+    //   << (*top)[1]->width();
     prefetch_label_.reset(
-        new Blob<Dtype>(this->layer_param_.data_param().batch_size(), 1, 1, 1));
+        new Blob<Dtype>(this->layer_param_.data_param().batch_size(),
+          datum.label_size(), 1, 1));
   }
   // datum size
   datum_channels_ = datum.channels();
@@ -288,8 +298,13 @@ Dtype DataLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   caffe_copy(prefetch_data_->count(), prefetch_data_->cpu_data(),
              (*top)[0]->mutable_cpu_data());
   if (output_labels_) {
-    caffe_copy(prefetch_label_->count(), prefetch_label_->cpu_data(),
-               (*top)[1]->mutable_cpu_data());
+    // caffe_copy(prefetch_label_->count(), prefetch_label_->cpu_data(),
+    //            (*top)[1]->mutable_cpu_data());
+    int batch_size = this->layer_param_.data_param().batch_size();
+    for (int i=0; i<prefetch_label_->channels(); i++) {
+      caffe_copy(batch_size, prefetch_label_->cpu_data() + i * batch_size,
+               (*top)[i+1]->mutable_cpu_data());
+    }
   }
   // Start a new prefetch thread
   CreatePrefetchThread();

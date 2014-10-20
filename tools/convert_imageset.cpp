@@ -50,7 +50,8 @@ int main(int argc, char** argv) {
   // Test whether argv[1] == "-g"
   bool is_color= !(string("-g") == string(argv[1]));
   int  arg_offset = (is_color ? 0 : 1);
-  std::vector<std::pair<std::string, std::vector<int> > > lines;
+
+  std::vector<std::pair<std::string, std::vector<float> > > lines;
   ReadImagesList(argv[arg_offset+2], &lines);
   // std::ifstream infile(argv[arg_offset+2]);
   // std::vector<std::pair<string, int> > lines;

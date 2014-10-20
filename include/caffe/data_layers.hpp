@@ -252,7 +252,7 @@ class ImageDataLayer : public Layer<Dtype> {
   virtual unsigned int PrefetchRand();
 
   shared_ptr<Caffe::RNG> prefetch_rng_;
-  vector<std::pair<std::string, int> > lines_;
+  vector<std::pair<std::string, vector<float> > > lines_;
   int lines_id_;
   int datum_channels_;
   int datum_height_;
@@ -263,6 +263,7 @@ class ImageDataLayer : public Layer<Dtype> {
   shared_ptr<Blob<Dtype> > prefetch_label_;
   Blob<Dtype> data_mean_;
   Caffe::Phase phase_;
+  bool output_labels_;
 };
 
 
