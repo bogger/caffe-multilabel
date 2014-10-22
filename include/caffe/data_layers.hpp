@@ -87,17 +87,17 @@ void* DataLayerPrefetch(void* layer_pointer);
 template <typename Dtype>
 void* DataPool5LayerPrefetch(void *layer_poiter);
 
-template <typename Dtype>
-void* MultiViewDataLayerPrefetch(void* layer_pointer);
+// template <typename Dtype>
+// void* MultiViewDataLayerPrefetch(void* layer_pointer);
 
-template <typename Dtype>
-void* CompactDataLayerPrefetch(void* layer_pointer);
+// template <typename Dtype>
+// void* CompactDataLayerPrefetch(void* layer_pointer);
 
-template <typename Dtype>
-void* CompactDataBBoxLayerPrefetch(void* layer_pointer);
+// template <typename Dtype>
+// void* CompactDataBBoxLayerPrefetch(void* layer_pointer);
 
-template <typename Dtype>
-void* MultiViewCompactDataLayerPrefetch(void* layer_pointer);
+// template <typename Dtype>
+// void* MultiViewCompactDataLayerPrefetch(void* layer_pointer);
 
 template <typename Dtype>
 class DataLayer : public Layer<Dtype> {
@@ -163,108 +163,108 @@ class DataPool5Layer : public DataLayer<Dtype> {
     shared_ptr<leveldb::Iterator> bg_iter_;
 };
 
-template <typename Dtype>
-class MultiViewDataLayer : public DataLayer<Dtype> {
-  friend void* MultiViewDataLayerPrefetch<Dtype>(void* layer_pointer);
+// template <typename Dtype>
+// class MultiViewDataLayer : public DataLayer<Dtype> {
+//   friend void* MultiViewDataLayerPrefetch<Dtype>(void* layer_pointer);
 
- public:
-  explicit MultiViewDataLayer(const LayerParameter& param)
-      : DataLayer<Dtype>(param) {}
+//  public:
+//   explicit MultiViewDataLayer(const LayerParameter& param)
+//       : DataLayer<Dtype>(param) {}
 
- protected:
-  virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
-  virtual void CreatePrefetchThread();
-};
+//  protected:
+//   virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
+//   virtual void CreatePrefetchThread();
+// };
 
-// inherit DataLayer
-template <typename Dtype>
-class CompactDataLayer : public DataLayer<Dtype> {
-  friend void* CompactDataLayerPrefetch<Dtype>(void* layer_pointer);
+// // inherit DataLayer
+// template <typename Dtype>
+// class CompactDataLayer : public DataLayer<Dtype> {
+//   friend void* CompactDataLayerPrefetch<Dtype>(void* layer_pointer);
 
- public:
-  explicit CompactDataLayer(const LayerParameter& param)
-      : DataLayer<Dtype>(param) {}
+//  public:
+//   explicit CompactDataLayer(const LayerParameter& param)
+//       : DataLayer<Dtype>(param) {}
 
- protected:
-  virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
-  virtual void CreatePrefetchThread();
-};
+//  protected:
+//   virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
+//   virtual void CreatePrefetchThread();
+// };
 
-template <typename Dtype>
-class CompactDataBBoxLayer : public DataLayer<Dtype> {
-  friend void* CompactDataBBoxLayerPrefetch<Dtype>(void* layer_pointer);
+// template <typename Dtype>
+// class CompactDataBBoxLayer : public DataLayer<Dtype> {
+//   friend void* CompactDataBBoxLayerPrefetch<Dtype>(void* layer_pointer);
 
- public:
-  explicit CompactDataBBoxLayer(const LayerParameter& param)
-      : DataLayer<Dtype>(param) {}
- protected:
-  virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
-  virtual void CreatePrefetchThread();
-};
+//  public:
+//   explicit CompactDataBBoxLayer(const LayerParameter& param)
+//       : DataLayer<Dtype>(param) {}
+//  protected:
+//   virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
+//   virtual void CreatePrefetchThread();
+// };
 
-template <typename Dtype>
-class MultiViewCompactDataLayer : public DataLayer<Dtype> {
-  friend void* MultiViewCompactDataLayerPrefetch<Dtype>(void* layer_pointer);
+// template <typename Dtype>
+// class MultiViewCompactDataLayer : public DataLayer<Dtype> {
+//   friend void* MultiViewCompactDataLayerPrefetch<Dtype>(void* layer_pointer);
 
- public:
-  explicit MultiViewCompactDataLayer(const LayerParameter& param)
-      : DataLayer<Dtype>(param) {}
+//  public:
+//   explicit MultiViewCompactDataLayer(const LayerParameter& param)
+//       : DataLayer<Dtype>(param) {}
 
- protected:
-  virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
-  virtual void CreatePrefetchThread();
-};
+//  protected:
+//   virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
+//   virtual void CreatePrefetchThread();
+// };
 
 // This function is used to create a pthread that prefetches the data.
-template <typename Dtype>
-void* ImageDataLayerPrefetch(void* layer_pointer);
+// template <typename Dtype>
+// void* ImageDataLayerPrefetch(void* layer_pointer);
 
-template <typename Dtype>
-class ImageDataLayer : public Layer<Dtype> {
-  // The function used to perform prefetching.
-  friend void* ImageDataLayerPrefetch<Dtype>(void* layer_pointer);
+// template <typename Dtype>
+// class ImageDataLayer : public Layer<Dtype> {
+//   // The function used to perform prefetching.
+//   friend void* ImageDataLayerPrefetch<Dtype>(void* layer_pointer);
 
- public:
-  explicit ImageDataLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual ~ImageDataLayer();
-  virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
+//  public:
+//   explicit ImageDataLayer(const LayerParameter& param)
+//       : Layer<Dtype>(param) {}
+//   virtual ~ImageDataLayer();
+//   virtual void SetUp(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
 
- protected:
-  virtual Dtype Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
-  virtual Dtype Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      vector<Blob<Dtype>*>* top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const bool propagate_down, vector<Blob<Dtype>*>* bottom) { return; }
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const bool propagate_down, vector<Blob<Dtype>*>* bottom) { return; }
+//  protected:
+//   virtual Dtype Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
+//   virtual Dtype Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+//       vector<Blob<Dtype>*>* top);
+//   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+//       const bool propagate_down, vector<Blob<Dtype>*>* bottom) { return; }
+//   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+//       const bool propagate_down, vector<Blob<Dtype>*>* bottom) { return; }
 
-  virtual void ShuffleImages();
+//   virtual void ShuffleImages();
 
-  virtual void CreatePrefetchThread();
-  virtual void JoinPrefetchThread();
-  virtual unsigned int PrefetchRand();
+//   virtual void CreatePrefetchThread();
+//   virtual void JoinPrefetchThread();
+//   virtual unsigned int PrefetchRand();
 
-  shared_ptr<Caffe::RNG> prefetch_rng_;
-  vector<std::pair<std::string, vector<float> > > lines_;
-  int lines_id_;
-  int datum_channels_;
-  int datum_height_;
-  int datum_width_;
-  int datum_size_;
-  pthread_t thread_;
-  shared_ptr<Blob<Dtype> > prefetch_data_;
-  shared_ptr<Blob<Dtype> > prefetch_label_;
-  Blob<Dtype> data_mean_;
-  Caffe::Phase phase_;
-  bool output_labels_;
-};
+//   shared_ptr<Caffe::RNG> prefetch_rng_;
+//   vector<std::pair<std::string, vector<float> > > lines_;
+//   int lines_id_;
+//   int datum_channels_;
+//   int datum_height_;
+//   int datum_width_;
+//   int datum_size_;
+//   pthread_t thread_;
+//   shared_ptr<Blob<Dtype> > prefetch_data_;
+//   shared_ptr<Blob<Dtype> > prefetch_label_;
+//   Blob<Dtype> data_mean_;
+//   Caffe::Phase phase_;
+//   bool output_labels_;
+// };
 
 
 // This function is used to create a pthread that prefetches the window data.

@@ -23,7 +23,7 @@ message Datum {
   optional int32 width = 3;
   // the actual image data, in bytes
   optional bytes data = 4;
-  optional int32 label = 5;
+  repeated float label = 5; //multilabel float
   // Optionally, the datum could also hold float data.
   repeated float float_data = 6;
 }
@@ -170,7 +170,7 @@ message LayerParameter {
     INFOGAIN_LOSS = 13;
     INNER_PRODUCT = 14;
     LRN = 15;
-	LOCAL = 71;
+  LOCAL = 71;
     MEMORY_DATA = 29;
     MULTINOMIAL_LOGISTIC_LOSS = 16;
     POOLING = 17;
@@ -211,6 +211,9 @@ message LayerParameter {
   // The weight decay that is multiplied on the global weight decay.
   repeated float weight_decay = 8;
 
+  // Weight of loss, added by Linjie
+  repeated float loss_weight = 35; 
+  
   // Parameters for particular layer types.
   optional ConcatParameter concat_param = 9;
   optional ConvolutionParameter convolution_param = 10;
@@ -298,6 +301,8 @@ message HDF5OutputParameter {
 // Message that stores parameters used by ImageDataLayer
 message ImageDataParameter {
   // Specify the data source.
+  // One line per image and vector of labels
+  // All the images should have the same number of labels.
   optional string source = 1;
   // For data pre-processing, we can do simple scaling and subtracting the
   // data mean, if provided. Note that the mean subtraction is always carried
@@ -320,6 +325,8 @@ message ImageDataParameter {
   // It will also resize images if new_height or new_width are not zero.
   optional uint32 new_height = 9 [default = 0];
   optional uint32 new_width = 10 [default = 0];
+  // By default assumes images are in color
+  optional bool images_in_color = 11 [default = true];
 }
 
 // Message that stores parameters InfogainLossLayer

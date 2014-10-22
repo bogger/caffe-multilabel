@@ -46,8 +46,8 @@ Layer<Dtype>* GetLayer(const LayerParameter& param) {
     return new HDF5OutputLayer<Dtype>(param);
   case LayerParameter_LayerType_HINGE_LOSS:
     return new HingeLossLayer<Dtype>(param);
-  case LayerParameter_LayerType_IMAGE_DATA:
-    return new ImageDataLayer<Dtype>(param);
+  // case LayerParameter_LayerType_IMAGE_DATA:
+  //   return new ImageDataLayer<Dtype>(param);
   case LayerParameter_LayerType_IM2COL:
     return new Im2colLayer<Dtype>(param);
   case LayerParameter_LayerType_INFOGAIN_LOSS:
@@ -88,16 +88,16 @@ Layer<Dtype>* GetLayer(const LayerParameter& param) {
     return new WindowDataNoBgLayer<Dtype>(param);
   case LayerParameter_LayerType_DATA_POOL5:
     return new DataPool5Layer<Dtype>(param);
-  case LayerParameter_LayerType_COMPACT_DATA:
-    return new CompactDataLayer<Dtype>(param);
-  case LayerParameter_LayerType_MULTIVIEW_DATA:
-    return new MultiViewDataLayer<Dtype>(param);
-  case LayerParameter_LayerType_MULTIVIEW_COMPACT_DATA:
-    return new MultiViewCompactDataLayer<Dtype>(param);
+  // case LayerParameter_LayerType_COMPACT_DATA:
+  //   return new CompactDataLayer<Dtype>(param);
+  // case LayerParameter_LayerType_MULTIVIEW_DATA:
+  //   return new MultiViewDataLayer<Dtype>(param);
+  // case LayerParameter_LayerType_MULTIVIEW_COMPACT_DATA:
+  //   return new MultiViewCompactDataLayer<Dtype>(param);
   case LayerParameter_LayerType_MULTIVIEW_ACCURACY:
     return new MultiViewAccuracyLayer<Dtype>(param);
-  case LayerParameter_LayerType_COMPACT_DATA_BBOX:
-    return new CompactDataBBoxLayer<Dtype>(param);
+  // case LayerParameter_LayerType_COMPACT_DATA_BBOX:
+  //   return new CompactDataBBoxLayer<Dtype>(param);
   case LayerParameter_LayerType_EUCLIDEAN_LOSS_1023:
     return new Euclidean1023LossLayer<Dtype>(param);
   case LayerParameter_LayerType_EUCLIDEAN_LOSS_255:

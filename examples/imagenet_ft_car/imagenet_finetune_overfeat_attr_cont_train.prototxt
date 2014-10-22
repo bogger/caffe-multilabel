@@ -3,7 +3,8 @@ layers {
   name: "car_part_train_data"
   type: DATA
   top: "car_part_train_data"
-  top: "label"
+  top: "speed"
+  top: "disl"
   data_param {
     source: "/home/ljyang/work/caffe_data/train_leveldb"
     mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_mean.binaryproto"
@@ -361,7 +362,7 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 200
+      value: 0
     }
   }
 }
@@ -383,21 +384,21 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 2
+      value: 0
     }
   }
 }
 
 layers {
   name: "loss_ft"
-  type: EUCLIDEAN_LOSS
+  type: L2_LOSS
   bottom: "fc8_speed"
-  bottom: "label1"
+  bottom: "speed"
 }
 layers {
   name: "loss_ft2"
-  type: EUCLIDEAN_LOSS
+  type: L2_LOSS
   bottom: "fc8_disl"
-  bottom: "label2"
-  loss_weight: 1000
+  bottom: "disl"
+  
 }

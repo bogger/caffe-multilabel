@@ -115,7 +115,8 @@ bool ReadImage(const string& filename,
   return true;
 }
 
-bool ReadImageToDatum(const string& filename, const int label,
+
+bool ReadImageToDatum(const string& filename, const float label,
     const int height, const int width, const bool is_color, Datum* datum) {
 
   if (ReadImage(filename, height, width, is_color, datum)) {
@@ -130,7 +131,8 @@ bool ReadImageToDatum(const string& filename, const int label,
   }
 }
 
-bool ReadImageToDatum(const string& filename, const std::vector<int> labels,
+
+bool ReadImageToDatum(const string& filename, const std::vector<float> labels,
     const int height, const int width, const bool is_color, Datum* datum) {
 
   if (labels.size() > 0) {
@@ -152,8 +154,8 @@ bool ReadImageToDatum(const string& filename, const std::vector<int> labels,
   }
 }
 
-void ReadImagesList(const string& source,
-    std::vector<std::pair<std::string, std::vector<int> > >* images_vec) {
+void ReadImagesList(const std::string& source,
+    std::vector<std::pair<std::string, std::vector<float> > >* images_vec) {
   // Read the file with filenames and labels
   LOG(INFO) << "Opening file " << source;
   std::ifstream infile(source.c_str());
@@ -164,8 +166,8 @@ void ReadImagesList(const string& source,
   while (std::getline(infile, line)) {
     std::istringstream iss(line);
     string filename;
-    std::vector<int> labels;
-    int label;
+    std::vector<float> labels;
+    float label;
     CHECK(iss >> filename) << "Error reading line " << line_num;
     while (iss >> label) {
       labels.push_back(label);
@@ -183,6 +185,8 @@ void ReadImagesList(const string& source,
   LOG(INFO) << "Read " << line_num - 1 << " images with " <<
     num_labels << " labels";
 }
+
+
 
 // Verifies format of data stored in HDF5 file and reshapes blob accordingly.
 template <typename Dtype>

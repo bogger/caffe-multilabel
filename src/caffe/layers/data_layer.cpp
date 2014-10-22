@@ -121,7 +121,9 @@ void* DataLayerPrefetch(void* layer_pointer) {
     if (layer->output_labels_) {
       CHECK_EQ(datum.label_size(), num_labels);
       for (int l = 0; l < num_labels; ++l) {
-        top_label[item_id * num_labels + l] = datum.label(l);
+        //modified for label buffer separation
+       /// top_label[item_id * num_labels + l] = datum.label(l); 
+        top_label[l * batch_size + item_id] = datum.label(l);
       }
     }
     //////////////////////////////////////////////////////////

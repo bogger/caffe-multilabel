@@ -4,6 +4,8 @@
 #define CAFFE_UTIL_IO_H_
 
 #include <string>
+#include <vector>
+#include <utility>
 
 #include "google/protobuf/message.h"
 #include "hdf5.h"
@@ -60,13 +62,31 @@ inline void WriteProtoToBinaryFile(
   WriteProtoToBinaryFile(proto, filename.c_str());
 }
 
-bool ReadImageToDatum(const string& filename, const int label,
-    const int height, const int width, Datum* datum);
 
-inline bool ReadImageToDatum(const string& filename, const int label,
+bool ReadImageToDatum(const string& filename, const std::vector<float> labels,
+    const int height, const int width, const bool is_color, Datum* datum);
+
+
+bool ReadImageToDatum(const string& filename, const float label,
+    const int height, const int width, const bool is_color, Datum* datum);
+
+
+inline bool ReadImageToDatum(const string& filename, const float label,
+    const int height, const int width, Datum* datum) {
+  return ReadImageToDatum(filename, label, height, width, true, datum);
+}
+
+
+inline bool ReadImageToDatum(const string& filename, const float label,
     Datum* datum) {
   return ReadImageToDatum(filename, label, 0, 0, datum);
 }
+
+
+void ReadImagesList(const std::string& source,
+    std::vector<std::pair<std::string, std::vector<float> > >* images_vec);
+
+
 
 template <typename Dtype>
 void hdf5_load_nd_dataset_helper(
