@@ -3,8 +3,9 @@ layers {
   name: "car_part_test_data"
   type: DATA
   top: "car_part_test_data"
-  top: "speed"
-  top: "disl"
+  top: "door"
+  top: "seat"
+  top: "type"
   data_param {
     source: "/home/ljyang/work/caffe_data/test_leveldb"
     mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_crop_mean.binaryproto"
@@ -222,43 +223,59 @@ layers {
   bottom: "fc7"
   top: "fc7"
   dropout_param {
-    dropout_ratio: 0.0
+    dropout_ratio: 0.5
   }
 }
 layers {
-  name: "fc8_speed"
+  name: "fc8_door"
   type: INNER_PRODUCT
   bottom: "fc7"
-  top: "fc8_speed"
+  top: "fc8_door"
   inner_product_param {
-    num_output: 1
+    num_output: 4
   }
 }
 
 
 layers {
-  name: "fc8_disl"
+  name: "fc8_seat"
   type: INNER_PRODUCT
   bottom: "fc7"
-  top: "fc8_disl"
+  top: "fc8_seat"
   inner_product_param {
-    num_output: 1
+    num_output: 4
   }
 }
 
+layers {
+  name: "fc8_type"
+  type: INNER_PRODUCT
+  bottom: "fc7"
+  top: "fc8_type"
+  inner_product_param {
+    num_output: 12
+  }
+}
 
 
 layers {
   name: "accuracy_ft"
-  type: L2_LOSS
-  bottom: "fc8_speed"
-  bottom: "speed"
+  type: SOFTMAX_LOSS
+  bottom: "fc8_door"
+  bottom: "door"
 
 }
 
 layers {
   name: "accuracy_ft2"
-  type: L2_LOSS
-  bottom: "fc8_disl"
-  bottom: "disl"
+  type: SOFTMAX_LOSS
+  bottom: "fc8_seat"
+  bottom: "seat"
+}
+
+layers {
+  name: "accuracy_ft3"
+  type: SOFTMAX_LOSS
+  bottom: "fc8_type"
+  bottom: "type"
 }

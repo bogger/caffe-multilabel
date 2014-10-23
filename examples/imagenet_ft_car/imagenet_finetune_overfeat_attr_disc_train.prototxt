@@ -3,8 +3,9 @@ layers {
   name: "car_part_train_data"
   type: DATA
   top: "car_part_train_data"
-  top: "speed"
-  top: "disl"
+  top: "door"
+  top: "seat"
+  top: "type"
   data_param {
     source: "/home/ljyang/work/caffe_data/train_leveldb"
     mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_mean.binaryproto"
@@ -342,20 +343,20 @@ layers {
   bottom: "fc7"
   top: "fc7"
   dropout_param {
-    dropout_ratio: 0.0
+    dropout_ratio: 0.5
   }
 }
 layers {
-  name: "fc8_speed"
+  name: "fc8_door"
   type: INNER_PRODUCT
   bottom: "fc7"
-  top: "fc8_speed"
+  top: "fc8_door"
   blobs_lr: 1.0
   blobs_lr: 2.0
   weight_decay: 1
   weight_decay: 0
   inner_product_param {
-    num_output: 1
+    num_output: 4
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -368,16 +369,16 @@ layers {
 }
 
 layers {
-  name: "fc8_disl"
+  name: "fc8_seat"
   type: INNER_PRODUCT
   bottom: "fc7"
-  top: "fc8_disl"
+  top: "fc8_seat"
   blobs_lr: 1.0
   blobs_lr: 2.0
   weight_decay: 1
   weight_decay: 0
   inner_product_param {
-    num_output: 1
+    num_output: 4
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -390,15 +391,63 @@ layers {
 }
 
 layers {
-  name: "loss_ft"
-  type: L2_LOSS
-  bottom: "fc8_speed"
-  bottom: "speed"
+  name: "fc8_type"
+  type: INNER_PRODUCT
+  bottom: "fc7"
+  top: "fc8_type"
+  blobs_lr: 1.0
+  blobs_lr: 2.0
+  weight_decay: 1
+  weight_decay: 0
+  inner_product_param {
+    num_output: 12
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
 }
 layers {
-  name: "loss_ft2"
-  type: L2_LOSS
-  bottom: "fc8_disl"
-  bottom: "disl"
-  
+  name: "prob_door"
+  type: SOFTMAX
+  bottom: "fc8_door"
+  top: "prob_door"
 }
+layers {
+  name: "accuracy_door"
+  type: ACCURACY
+  bottom: "prob_door"
+  bottom: "door"
+  top: "accuracy_door"
+}
+layers {
+  name: "prob_seat"
+  type: SOFTMAX
+  bottom: "fc8_seat"
+  top: "prob_seat"
+}
+layers {
+  name: "accuracy_seat"
+  type: ACCURACY
+  bottom: "prob_seat"
+  bottom: "door"
+  top: "accuracy_seat"
+}
+layers {
+  name: "prob_type"
+  type: SOFTMAX
+  bottom: "fc8_type"
+  top: "prob_type"
+}
+layers {
+  name: "accuracy_type"
+  type: ACCURACY
+  bottom: "prob_type"
+  bottom: "type"
+  top: "accuracy_type"
+}
+
