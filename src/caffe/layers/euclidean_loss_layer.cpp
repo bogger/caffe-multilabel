@@ -34,9 +34,9 @@ Dtype L2LossLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   int count = bottom[0]->count();
   const Dtype *data0 = bottom[0]->cpu_data();
   const Dtype *data1 = bottom[1]->cpu_data();
-  for (int i = 0; i < 4; i++) {
-    std::cout << data0[i] << ", " << data1[i] << std::endl;
-  }
+  // for (int i = 0; i < 4; i++) {
+  //   std::cout << data0[i] << ", " << data1[i] << std::endl;
+  // }
   caffe_sub(
       count,
       bottom[0]->cpu_data(),
