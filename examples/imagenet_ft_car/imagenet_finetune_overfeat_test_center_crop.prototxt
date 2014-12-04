@@ -3,12 +3,11 @@ layers {
   name: "car_part_test_data"
   type: DATA
   top: "car_part_test_data"
-  top: "speed"
-  top: "disl"
+  top: "label"
   data_param {
     source: "/home/ljyang/work/caffe_data/test_leveldb"
     mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_mean.binaryproto"
-    batch_size: 256
+    batch_size: 200
     crop_size: 227
     mirror: false
   }
@@ -216,49 +215,26 @@ layers {
   bottom: "fc7"
   top: "fc7"
 }
+
 layers {
-  name: "drop7"
-  type: DROPOUT
-  bottom: "fc7"
-  top: "fc7"
-  dropout_param {
-    dropout_ratio: 0.0
-  }
-}
-layers {
-  name: "fc8_speed"
+  name: "fc8_car"
   type: INNER_PRODUCT
   bottom: "fc7"
-  top: "fc8_speed"
+  top: "fc8_car"
   inner_product_param {
-    num_output: 1
+    num_output: 442
   }
 }
-
-
 layers {
-  name: "fc8_disl"
-  type: INNER_PRODUCT
-  bottom: "fc7"
-  top: "fc8_disl"
-  inner_product_param {
-    num_output: 1
-  }
+  name: "prob_ft"
+  type: SOFTMAX
+  bottom: "fc8_car"
+  top: "prob_ft"
 }
-
-
-
 layers {
   name: "accuracy_ft"
-  type: L2_LOSS
-  bottom: "fc8_speed"
-  bottom: "speed"
-
-}
-
-layers {
-  name: "accuracy_ft2"
-  type: L2_LOSS
-  bottom: "fc8_disl"
-  bottom: "disl"
+  type: ACCURACY
+  bottom: "prob_ft"
+  bottom: "label"
+  top: "accuracy_ft"
 }

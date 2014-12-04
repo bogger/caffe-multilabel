@@ -8,7 +8,7 @@ layers {
   data_param {
     source: "/home/ljyang/work/caffe_data/train_leveldb"
     mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_mean.binaryproto"
-    batch_size: 260
+    batch_size: 256
     crop_size: 227
     mirror: true
   }

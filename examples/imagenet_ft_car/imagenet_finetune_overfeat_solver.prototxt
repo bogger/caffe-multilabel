@@ -1,17 +1,17 @@
-train_net: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/examples/imagenet_ft_car/imagenet_finetune_overfeat_attr_cont_train.prototxt"
-test_net: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/examples/imagenet_ft_car/imagenet_finetune_overfeat_attr_cont_test.prototxt"
-test_iter: 34
+train_net: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/examples/imagenet_ft_car/imagenet_finetune_overfeat_attr_disc_train.prototxt"
+test_net: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/examples/imagenet_ft_car/imagenet_finetune_overfeat_attr_disc_test.prototxt"
+test_iter: 4
 test_interval: 50
 base_lr: 0.001
 lr_policy: "step"
 gamma: 0.1
-stepsize: 800
+stepsize: 1500
 display: 20
-max_iter: 1400
+max_iter: 3000
 momentum: 0.9
 weight_decay:0.0005
-snapshot: 1400
+snapshot: 1500
 test_compute_loss: true
-snapshot_prefix: "imagenet_finetune_car_attr_cont_1"
+snapshot_prefix: "imagenet_finetune_car_attr_disc"
 solver_mode: GPU
 device_id:0

@@ -8,9 +8,9 @@ layers {
   top: "type"
   data_param {
     source: "/home/ljyang/work/caffe_data/test_leveldb"
-    mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_crop_mean.binaryproto"
-    batch_size: 260
-    crop_size: 0
+    mean_file: "/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/data/car/car_part_mean.binaryproto"
+    batch_size: 256
+    crop_size: 227
     mirror: false
   }
 }
@@ -258,24 +258,43 @@ layers {
 }
 
 
+
 layers {
-  name: "accuracy_ft"
-  type: SOFTMAX_LOSS
+  name: "prob_door"
+  type: SOFTMAX
   bottom: "fc8_door"
+  top: "prob_door"
+}
+layers {
+  name: "accuracy_door"
+  type: ACCURACY
+  bottom: "prob_door"
   bottom: "door"
-
+  top: "accuracy_door"
 }
-
 layers {
-  name: "accuracy_ft2"
-  type: SOFTMAX_LOSS
+  name: "prob_seat"
+  type: SOFTMAX
   bottom: "fc8_seat"
-  bottom: "seat"
+  top: "prob_seat"
 }
-
 layers {
-  name: "accuracy_ft3"
-  type: SOFTMAX_LOSS
+  name: "accuracy_seat"
+  type: ACCURACY
+  bottom: "prob_seat"
+  bottom: "seat"
+  top: "accuracy_seat"
+}
+layers {
+  name: "prob_type"
+  type: SOFTMAX
   bottom: "fc8_type"
+  top: "prob_type"
+}
+layers {
+  name: "accuracy_type"
+  type: ACCURACY
+  bottom: "prob_type"
   bottom: "type"
+  top: "accuracy_type"
 }
