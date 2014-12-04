@@ -7,8 +7,8 @@ dbfd='~/work/caffe_data/';
 attr_type='attr_cont';
 iters=[900,900,1500,1500,1500];
 
-for i=[2,4,5]
-    i
+
+    
     %prep data
     if exist([dbfd,'train_leveldb'],'dir')
         rmdir([dbfd,'train_leveldb'],'s');
@@ -17,11 +17,11 @@ for i=[2,4,5]
         rmdir([dbfd,'test_leveldb'],'s');
     end
     
-    cmd= ['convert_imageset.bin ',rootfd,' ',listfd,'train_car_',attr_type,'_',num2str(i),...
+    cmd= ['convert_imageset.bin ',rootfd,' ',listfd,'train_car_',attr_type,...
         ' ',dbfd,'train_leveldb 1'];
     cmd
     system(cmd);
-    cmd =['convert_imageset.bin ',rootfd_test,' ',listfd,'test_car_',attr_type,'_',num2str(i),...
+    cmd =['convert_imageset.bin ',rootfd_test,' ',listfd,'test_car_',attr_type,...
        ' ',dbfd,'test_leveldb 0'];
     system(cmd);
     %cmd =['convert_imageset.bin ',rootfd,' ',listfd,'test_part_',num2str(i),...
@@ -30,6 +30,7 @@ for i=[2,4,5]
     %write solver
     solv_name = '../../examples/imagenet_ft_car/imagenet_finetune_overfeat_solver.bak';
     solv_new = '../../examples/imagenet_ft_car/imagenet_finetune_overfeat_solver.prototxt';
+    %%
     f1=fopen(solv_name,'r');
     f2=fopen(solv_new,'w');
 
@@ -37,7 +38,7 @@ for i=[2,4,5]
         'examples/imagenet_ft_car/imagenet_finetune_overfeat_',attr_type,'_train.prototxt\"\n']);
     fprintf(f2,['test_net: \"/home/ljyang/work/caffe/caffe-mmlab-mmlab_shared_buffer/',...
         'examples/imagenet_ft_car/imagenet_finetune_overfeat_',attr_type,'_test.prototxt\"\n']);
-    fprintf(f2,'test_iter: 2\n');
+    fprintf(f2,'test_iter: 4\n');
     fprintf(f2,'test_interval: 50\n');
     fprintf(f2,'base_lr: 0.001\n');
     for k=1:5
@@ -49,9 +50,9 @@ for i=[2,4,5]
     end
     
 
-    fprintf(f2,'stepsize: 1000\n');
+    fprintf(f2,'stepsize: 1500\n');
     fprintf(f2,'display: 20\n');
-    fprintf(f2,'max_iter: 2000\n');
+    fprintf(f2,'max_iter: 3000\n');
     fprintf(f2,'momentum: 0.9\n');
     fprintf(f2,'weight_decay:0.0005\n');
     fprintf(f2,'snapshot: 1000\n');
@@ -59,7 +60,7 @@ for i=[2,4,5]
     fprintf(f2,'test_compute_loss: true\n');
     
     fprintf(f2,'snapshot_prefix: ');
-    fprintf(f2, '\"imagenet_finetune_car_%s_%d\"\n',attr_type,i);
+    fprintf(f2, '\"imagenet_finetune_car_%s_p2\"\n',attr_type);%phase 2
     fprintf(f2, 'solver_mode: GPU\ndevice_id:0\n');
     fclose(f1);
     fclose(f2);
@@ -67,13 +68,16 @@ for i=[2,4,5]
 %     cmd=['GLOG_logtostderr=1 finetune_net.bin ',...
 %         '../../examples/imagenet_ft_car/imagenet_finetune_overfeat_solver.prototxt ',...
 %         'imagenet_finetune_car_',attr_type,'_',num2str(i),'_iter_1400'];
-
+%%
+%     cmd=['GLOG_logtostderr=1 finetune_net.bin ',...
+%         '../../examples/imagenet_ft_car/imagenet_finetune_overfeat_solver.prototxt ',...
+%         '../../examples/imagenet_ft_car/imagenet-overfeat_iter_860000'];
+%     system(cmd);
     cmd=['GLOG_logtostderr=1 finetune_net.bin ',...
         '../../examples/imagenet_ft_car/imagenet_finetune_overfeat_solver.prototxt ',...
-        '../../examples/imagenet_ft_car/imagenet-overfeat_iter_860000'];
+        'imagenet_finetune_car_',attr_type,'_iter_2000'];
     system(cmd);
-
     %system('sudo bash ./train.sh');
     %system('gnome-terminal -x sh train.sh');
 
-end
+

@@ -30,10 +30,10 @@ crop_l=227;
 modules = 5;
 crop_s = full_l - crop_l + 1;
 %256 -227
-for i=1:modules
-    f_train(i) = fopen([train_filename,'_',num2str(i)],'w');
-    f_test(i) = fopen([test_filename,'_',num2str(i)],'w');
-end
+
+    f_train = fopen([train_filename],'w');
+    f_test = fopen([test_filename],'w');
+
 % half train, half test
 %train dup images [5/im_n] times
 % pos = randi(crop_s,n,2,test_crop);
@@ -47,8 +47,8 @@ for i=1:n
                 
         for k=1:im_n(i,j)
           
-            fprintf(f_train(j),[num2str(s_id(i)),'/',num2str(j),'/',im_list(k).name]);
-            fprintf(f_train(j),' %f %f\n',s_attr(i,1), s_attr(i,2));
+            fprintf(f_train,[num2str(s_id(i)),'/',num2str(j),'/',im_list(k).name]);
+            fprintf(f_train,' %f %f\n',s_attr(i,1), s_attr(i,2));
           
         end
 
@@ -64,16 +64,14 @@ for i=1:n_v
                 
         for k=1:im_n_v(i,j)
           
-            fprintf(f_test(j),[num2str(s_v_id(i)),'/',num2str(j),'/',im_list(k).name]);
-            fprintf(f_test(j),' %f %f\n',s_v_attr(i,1), s_v_attr(i,2));
+            fprintf(f_test,[num2str(s_v_id(i)),'/',num2str(j),'/',im_list(k).name]);
+            fprintf(f_test,' %f %f\n',s_v_attr(i,1), s_v_attr(i,2));
           
         end
     end
 end
-for i=1:modules
-    fclose(f_train(i));
-    fclose(f_test(i));
-end
 
-save im_n_v im_n_v
+fclose(f_train);
+fclose(f_test);
+
 %max(im_n,[],1)

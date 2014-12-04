@@ -1,26 +1,30 @@
 clear,close all,clc
-type ='verification';
+type ='verification_add';
 datDir=['~/work/data/',type];
 savDir =['~/work/data/',type,'_resize'];
-load select_data2%s_id, s_v_id
+load select_data_add%s_id, s_v_id
+
 rng(0);%rand seed
-s_id = s_v_id; %comment this line for classification data
-n=length(s_id);
-im_n = zeros(n,8);
+%comment this line for classification data
+n=length(v_a_id);
+im_n_a = zeros(n,1);
 
 for i=1:n
-    for j=1:5
-        srcDir = [datDir,'/',num2str(s_id(i)),'/',num2str(j)];
-        desDir = [savDir,'/',num2str(s_id(i)),'/',num2str(j)];
+    
+        srcDir = [datDir,'/',num2str(v_a_id(i))];
+        desDir = [savDir,'/',num2str(v_a_id(i))];
         if ~exist(desDir,'dir')
             mkdir(desDir);
         end
         im_list = dir([srcDir,'/*.jpg']);
-        im_n(i,j) = length(im_list);
-        for k=1:im_n(i,j)
+        im_n_a(i) = length(im_list);
+        for k=1:im_n_a(i)
             im = imread([srcDir,'/',im_list(k).name]);
             im =imresize(im, [256,256]);
             imwrite(im,[desDir,'/',im_list(k).name]);
         end
-    end
+   
 end
+
+save im_n_a im_n_a
+
